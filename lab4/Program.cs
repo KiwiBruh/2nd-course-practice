@@ -6,7 +6,7 @@ public class Program
         Func<double, double> function = x => x * x; // Подынтегральное выражение
         double lowerBound = 0; // Нижняя граница интегрирования
         double upperBound = 1; // Верхняя граница интегрирования
-        double accuracy = 0.0001; // Точность решения
+        double accuracy = 0.0000000001; // Точность решения
 
         IIntegralSolver leftRectangleSolver = new LeftRectangleSolver();
         IIntegralSolver rightRectangleSolver = new RightRectangleSolver();
