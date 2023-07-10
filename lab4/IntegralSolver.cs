@@ -18,11 +18,19 @@ public class LeftRectangleSolver : IIntegralSolver
         double step = interval / iterations;
         
         double result = 0;
+        double previousResult = 0;
 
-        for (int i = 0; i < iterations; i++)
+        for (int i = 1; i <= iterations; i++)
         {
             double x = lowerBound + i * step;
             result += function(x) * step;
+
+            if (Math.Abs(result - previousResult) <= accuracy)
+            {
+                break;
+            }
+
+            previousResult = result;
         }
 
         return result;
@@ -31,20 +39,27 @@ public class LeftRectangleSolver : IIntegralSolver
 public class RightRectangleSolver : IIntegralSolver
 {
     public string MethodName => "Right Rectangles";
-
+    
     public double Solve(Func<double, double> function, double lowerBound, double upperBound, double accuracy)
     {
-        int iterations = 1000; // Максимальное количество итераций
+        int iterations = 1000;
         
         double interval = upperBound - lowerBound;
         double step = interval / iterations;
-        
         double result = 0;
+        double previousResult = 0;
 
-        for (int i = 1; i <= iterations; i++)
+        for (int i = 0; i <= iterations; i++)
         {
-            double x = lowerBound + i * step;
+            double x = upperBound - i * step;
             result += function(x) * step;
+
+            if (Math.Abs(result - previousResult) <= accuracy)
+            {
+                break;
+            }
+
+            previousResult = result;
         }
 
         return result;
@@ -63,11 +78,19 @@ public class MiddleRectangleSolver : IIntegralSolver
         double step = interval / iterations;
         
         double result = 0;
+        double previousResult = 0;
 
         for (int i = 0; i < iterations; i++)
         {
             double x = lowerBound + (i + 0.5) * step;
             result += function(x) * step;
+            
+            if (Math.Abs(result - previousResult) <= accuracy)
+            {
+                break;
+            }
+
+            previousResult = result;
         }
 
         return result;
@@ -86,11 +109,19 @@ public class TrapezoidSolver : IIntegralSolver
         double step = interval / iterations;
         
         double result = 0;
+        double previousResult = 0;
 
         for (int i = 1; i < iterations; i++)
         {
             double x = lowerBound + i * step;
             result += function(x);
+            
+            if (Math.Abs(result - previousResult) <= accuracy)
+            {
+                break;
+            }
+
+            previousResult = result;
         }
 
         result += (function(lowerBound) + function(upperBound)) / 2;
@@ -112,6 +143,7 @@ public class SimpsonSolver : IIntegralSolver
         double step = interval / iterations;
         
         double result = 0;
+        double previousResult = 0;
 
         for (int i = 0; i < iterations; i += 2)
         {
@@ -120,6 +152,13 @@ public class SimpsonSolver : IIntegralSolver
             double x2 = x1 + step;
 
             result += (function(x0) + 4 * function(x1) + function(x2)) * step / 3;
+            
+            if (Math.Abs(result - previousResult) <= accuracy)
+            {
+                break;
+            }
+
+            previousResult = result;
         }
 
         return result;
